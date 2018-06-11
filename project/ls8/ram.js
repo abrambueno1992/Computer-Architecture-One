@@ -13,16 +13,22 @@ class RAM {
     write(MAR, MDR) {
         // !!! IMPLEMENT ME
         // write the value in the MDR to the address MAR
+        //10011001 00000rrr iiiiiiii
+       //return 
+       this.mem[MAR] = MDR
     }
 
     /**
      * Read (load) MDR value from address MAR
      * 
-     * @returns MDR
+     * returns MDR
      */
     read(MAR) {
         // !!! IMPLEMENT ME
         // Read the value in address MAR and return it
+        this.mem;
+        // console.log('memory', this.mem);
+       return this.mem[MAR]
     }
 }
 
