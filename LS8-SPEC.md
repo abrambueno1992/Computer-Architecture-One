@@ -84,7 +84,7 @@ instruction, the appropriate bit in the IS register will be set.
 
 Prior to instruction fetch, the following steps occur:
 
-1. The IM register is bitwise AND-ed with the IS register and the
+1. The IM (interrupt mask) register is bitwise AND-ed with the IS(interrupt status) register and the
    results stored as `maskedInterrupts`.
 2. Each bit of `maskedInterrupts` is checked, starting from 0 and going
    up to the 7th bit, one for each interrupt.
@@ -96,7 +96,7 @@ If a bit is set:
 1. Disable further interrupts.
 2. Clear the bit in the IS register.
 3. The `PC` register is pushed on the stack.
-4. The `FL` register is pushed on the stack.
+4. The `FL`(flags) register is pushed on the stack.
 5. Registers R0-R6 are pushed on the stack in that order.
 6. The address (_vector_ in interrupt terminology) of the appropriate
    handler is looked up from the interrupt vector table.
@@ -106,7 +106,7 @@ While an interrupt is being serviced (between the handler being called
 and the `IRET`), further interrupts are disabled.
 
 See `IRET`, below, for returning from an interrupt.
-
+`IRET`: Is the return from an interrupt handler
 
 ### Interrupt numbers
 

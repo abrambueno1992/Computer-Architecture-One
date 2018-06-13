@@ -5,6 +5,13 @@
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
+const LDI = 0b10011001;
+const PRN = 0b01000011;
+const MUL = 0b10101010;
+const HLT = 0b00000001;
+const PUSH = 0b01001101;
+const POP = 0b01001100;
+
 class CPU {
 
     /**
@@ -17,6 +24,9 @@ class CPU {
 
         // Special-purpose registers
         this.PC = 0; // Program Counter
+        this.SP = 244;
+        this.newStack = new Stack;
+
     }
 
     /**
@@ -54,24 +64,34 @@ class CPU {
      */
     alu(op, regA, regB) {
         switch (op) {
-            case 'MUL':
-            // !!! IMPLEMENT ME
-            case 'LDI':
-                this.PC++;
-                let binteg = (regB.toString(2))
-                console.log('LDI', typeof binteg, binteg)
-                return 10011001 + regA + binteg 
-                // return binteg
-            case 'PRN':
-                this.PC++;
-                let pinteg = (regB.toString(2))
-                console.log('PRN', typeof pinteg, pinteg)
-                return 01000011 + regA  + pinteg 
-            case 'END':
-                // THIS.PC++;
-                return parseInt(00000001)// 00000001
-                // return pinteg
+            case MUL:
+                this.PC += 3;
+                let valA = this.reg[regA];
+                let valB = this.reg[regB];
+                let prod = valA * valB;
+                this.reg[regA] = prod;
                 break;
+            // !!! IMPLEMENT ME
+            case LDI:
+                this.reg[regA] = regB//10011001;
+                this.PC += 3;
+                break;
+            case PRN:
+                this.PC += 2;
+                console.log(this.reg[regA]);
+                break;
+            case PUSH:
+                this.PC += 2;
+                this.newStack.push(this.reg[regA]);
+                break;
+            case POP:
+                this.PC += 2;
+                this.reg[regA] = this.newStack.pop()
+
+                break;
+            case HLT:
+                this.stopClock()
+            // break;
         }
     }
 
@@ -79,27 +99,10 @@ class CPU {
      * Advances the CPU one cycle
      */
     tick() {
-        let IR = this.ram.read(this.PC)//[this.PC];
+        let IR = this.ram.read(this.PC)//.toString(2)//[this.PC];
         let operandA = this.ram.read(this.PC + 1);
         let operandB = this.ram.read(this.PC + 2);
-        // return this.ram.read(this.PC);
-        if (IR === 1) {
-            this.alu('END')
-            // this.stopClock()
-        } else if (IR === 153) {
-            this.alu('LDI', operandA, operandB)
-
-        }
-        
-        else if (IR === 67) {
-            this.alu('PRN', operandA, operandB)
-        } else if (IR === 67) {
-            this.alu('R0', regA,regB)
-        }
-
-        else {
-            this.PC++
-        }
+        this.alu(IR, operandA, operandB)
 
 
         // Load the instruction register (IR--can just be a local variable here)
@@ -129,6 +132,51 @@ class CPU {
         // for any particular instruction.
 
         // !!! IMPLEMENT ME
+    }
+}
+class Stack {
+
+    // Array is used to implement stack
+    constructor() {
+        this.items = [];
+        this.SP = 244; // Stack program counter
+
+    }
+
+    // Functions to be implemented
+    // push(item)
+    push(element, i) {
+        // push element into the items
+        this.items[this.SP - 1] = element;
+        this.SP--;
+    }
+    // pop()
+    pop() {
+        // return top most element in the stack
+        // and removes it from the stack
+        // Underflow if stack is empty
+        if (this.items.length == 0)
+            return "Underflow";
+        this.SP++
+        return this.items.pop();
+    }
+    // peek()
+    peek() {
+        // return the top most element from the stack
+        // but does'nt delete it.
+        return this.items[this.items.length - 1];
+    }
+    // isEmpty()
+    isEmpty() {
+        // return true if stack is empty
+        return this.items.length == 0;
+    }
+    // printStack()
+    printStack() {
+        var str = "";
+        for (var i = 0; i < this.items.length; i++)
+            str += this.items[i] + " ";
+        return str;
     }
 }
 
