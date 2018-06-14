@@ -180,6 +180,33 @@ Machine code:
 ```
 01001000 00000rrr
 ```
+<!-- ``` -->
+
+### RET
+
+`RET`
+
+Return from subroutine.
+
+Pop the value from the top of the stack and store it in the `PC`.
+
+Machine Code:
+```
+00001001
+```
+### JMP
+
+`JMP register`
+
+Jump to the address stored in the given register.
+
+Set the `PC` to the address stored in the given register.
+
+Machine code:
+```
+01010000 00000rrr
+```
+
 
 ### CMP
 

@@ -11,7 +11,9 @@ const MUL = 0b10101010;
 const HLT = 0b00000001;
 const PUSH = 0b01001101;
 const POP = 0b01001100;
-
+const CALL = 0b01001000;
+const RET = 0b00001001;
+const ADD = 0b10101000;
 class CPU {
 
     /**
@@ -91,6 +93,19 @@ class CPU {
                 break;
             case HLT:
                 this.stopClock()
+            case CALL:
+                this.newStack.push(this.PC + 2);
+                this.PC = this.reg[regA]
+                // console.log('called, reg', this.reg, this.PC, this.ram.read(this.PC))
+                break;
+            case RET:
+                // console.log('returned, reg', this.reg)
+                this.PC = this.newStack.pop();
+                break;
+            case ADD:
+                this.reg[regA] = this.reg[regA] * 2;
+                this.PC += 3;
+                break;
             // break;
         }
     }
@@ -100,6 +115,9 @@ class CPU {
      */
     tick() {
         let IR = this.ram.read(this.PC)//.toString(2)//[this.PC];
+        // if (IR === 168) {
+        //     console.log('168 confirmed', IR)
+        // }
         let operandA = this.ram.read(this.PC + 1);
         let operandB = this.ram.read(this.PC + 2);
         this.alu(IR, operandA, operandB)
@@ -145,7 +163,7 @@ class Stack {
 
     // Functions to be implemented
     // push(item)
-    push(element, i) {
+    push(element) {
         // push element into the items
         this.items[this.SP - 1] = element;
         this.SP--;

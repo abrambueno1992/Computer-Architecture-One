@@ -34,7 +34,7 @@ const filename = argv[0];
 const regexp = /[0-1]{8}/gi;
 const filedata = fs.readFileSync(filename, "utf8").match(regexp)
 
-
+// console.log('data', filedata)
 loadMemory(cpu,filedata);
 
 
